@@ -148,19 +148,19 @@
                          @bind-SelectedItems="@SelectedUsers">
                 <GridColumns>
                     <GridCheckboxColumn></GridCheckboxColumn>
-                    <GridColumn Field="@nameof(User.FirstName)" Title="Keresztnév" Width="100px" />
-                    <GridColumn Field="@nameof(User.LastName)" Title="Vezetéknév" Width="100px" />
+                    <GridColumn Field="@nameof(User.FirstName)" Title="Keresztnév" Width="120px" />
+                    <GridColumn Field="@nameof(User.LastName)" Title="Vezetéknév" Width="120px" />
                     <GridColumn Field="City.PostCode" Title="Irányítószám" Width="100px" />
-                    <GridColumn Field="City.Name" Title="Város" Width="100px" />
-                    <GridColumn Field="@nameof(User.Address)" Title="Cím" Width="120px" />
+                    <GridColumn Field="City.Name" Title="Város" Width="120px" />
+                    <GridColumn Field="@nameof(User.Address)" Title="Cím" Width="200px" />
                     <GridColumn Field="@nameof(User.Email)" Title="Email" Width="200px" />
-                    <GridColumn Field="@nameof(User.Password)" Title="Jelszó" Width="100px" />
-                    <GridColumn Field="@nameof(User.BirthDate)" Width="120px" Title="Születési idő">
+                    <GridColumn Field="@nameof(User.Password)" Title="Jelszó" Width="120px" />
+                    <GridColumn Field="@nameof(User.BirthDate)" Width="130px" Title="Születési idő">
                         <Template Context="myContext">
                                     @((myContext as User)?.BirthDate.ToString("yyyy.MM.dd") ?? "")
                         </Template>
                     </GridColumn>
-                    <GridColumn Field="@nameof(User.BirthPlace)" Width="120px" Title="Születési hely" TextAlign="@ColumnTextAlign.Center" />
+                    <GridColumn Field="@nameof(User.BirthPlace)" Width="140px" Title="Születési hely" TextAlign="@ColumnTextAlign.Center" />
                     <GridColumn Field="@nameof(User.Id)" Title="Id" />
         @*             <GridCommandColumn Context="myContext2" Width="50px">
                                 <GridCommandButton Icon="@SvgIcon.Pencil" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary"
