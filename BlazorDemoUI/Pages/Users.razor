@@ -1,0 +1,180 @@
+﻿@page "/users"
+@using System.Text
+@using Telerik.DataSource
+@using Telerik.DataSource.Extensions
+@using User = BlazorDemo.Domain.Users.User
+@using BlazorDemo.Application.Users.GetAll
+@using MediatR
+@inject IMediator Mediator
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+
+@code {
+    #region Props
+
+    TelerikGrid<User> GridRef = null!;
+
+    List<User> UserList = new List<User>();
+
+    IEnumerable<User> SelectedUsers = Enumerable.Empty<User>();
+
+    #endregion
+
+    #region Override
+
+    protected override async Task OnInitializedAsync()
+    {
+        UserList = await Mediator.Send(new GetAllUserQuery());
+    }
+
+    #endregion
+
+    #region Commands
+
+    // private void EditInlineUserCommand(GridCommandEventArgs args)
+    // {
+    //     var id = (args.Item as User)!.Id;
+    //     NavigationManager.NavigateTo($"/users/{id}");
+    // }
+
+    private async void EditUserCommand()
+    {
+        var selectedUser = SelectedUsers.FirstOrDefault();
+        if (selectedUser != null)
+        {
+            var id = selectedUser.Id;
+            NavigationManager.NavigateTo($"/users/{id}");
+        }
+        else
+        {
+            await JSRuntime.InvokeVoidAsync("alert", "Nem választott ki felhasználót!");
+        }
+    }
+
+    private async Task DownloadXmlCommand()
+    {
+        var visibleRows = GetCurrentMainGridData();
+
+        var xmlString = SerializeObjectToXml(visibleRows);
+        string fileName = "users.xml";
+        string contentType = "text/xml";
+
+        await JSRuntime.InvokeVoidAsync("BlazorDownloadFile", fileName, contentType, xmlString);
+    }
+
+    #endregion
+
+    #region Methods
+
+    private List<User> GetCurrentMainGridData()
+    {
+        return RequestCurrentMainGridData(GridRef.GetState());
+    }
+
+    private List<User> RequestCurrentMainGridData(GridState<User> gridState)
+    {
+        var currentMainGridData = new List<User>();
+        var filterAndSearchDescriptors = new List<IFilterDescriptor>(gridState.FilterDescriptors);
+        filterAndSearchDescriptors.Add(gridState.SearchFilter);
+
+        var request = new DataSourceRequest()
+            {
+                Filters = filterAndSearchDescriptors,
+                Groups = gridState.GroupDescriptors.ToList(),
+                // Page = gridState.Page ?? 1, // for paging
+                // PageSize = GridPageSize,
+                // Skip = gridState.Skip ?? 0, // for virtual scrolling
+                Sorts = gridState.SortDescriptors.ToList()
+            };
+
+        var result = UserList.ToDataSourceResult(request);
+
+        if (gridState.GroupDescriptors.Any())
+        {
+            var groups = result.Data.Cast<AggregateFunctionsGroup>();
+            currentMainGridData = new List<User>();
+
+            foreach (var group in groups)
+            {
+                currentMainGridData.AddRange(group.Items.Cast<User>().ToList());
+            }
+        }
+        else
+        {
+            currentMainGridData = result.Data.Cast<User>().ToList();
+        }
+
+        return currentMainGridData;
+    }
+
+    // Az objektum XML-re konvertálása
+    private string SerializeObjectToXml<T>(T obj)
+    {
+        var xmlSerializer = new System.Xml.Serialization.XmlSerializer(obj.GetType());
+        using (var stringWriter = new System.IO.StringWriter())
+        {
+            xmlSerializer.Serialize(stringWriter, obj);
+            return stringWriter.ToString();
+        }
+    }
+
+    private Stream GenerateStreamFromString(string s)
+    {
+        byte[] byteArray = Encoding.UTF8.GetBytes(s);
+        MemoryStream stream = new MemoryStream(byteArray);
+        return stream;
+    }
+
+    #endregion
+}
+
+<AuthorizeView>
+    <Authorized>
+        <div class="users-container">
+            <h1>Felhasználók</h1>
+
+            <TelerikGrid @ref="@GridRef"
+                         Class="grid"
+                         Data=@UserList
+                         Pageable="false"
+                         Groupable="false"
+                         Sortable="true"
+                         FilterMode="GridFilterMode.FilterMenu"
+                         Resizable="false"
+                         Reorderable="true"
+                         EditMode="GridEditMode.None"
+                         SelectionMode="GridSelectionMode.Single"
+                         Navigable="true"
+                         @bind-SelectedItems="@SelectedUsers">
+                <GridColumns>
+                    <GridCheckboxColumn></GridCheckboxColumn>
+                    <GridColumn Field="@nameof(User.FirstName)" Title="Keresztnév" Width="100px" />
+                    <GridColumn Field="@nameof(User.LastName)" Title="Vezetéknév" Width="100px" />
+                    <GridColumn Field="City.PostCode" Title="Irányítószám" Width="100px" />
+                    <GridColumn Field="City.Name" Title="Város" Width="100px" />
+                    <GridColumn Field="@nameof(User.Address)" Title="Cím" Width="120px" />
+                    <GridColumn Field="@nameof(User.Email)" Title="Email" Width="200px" />
+                    <GridColumn Field="@nameof(User.Password)" Title="Jelszó" Width="100px" />
+                    <GridColumn Field="@nameof(User.BirthDate)" Width="120px" Title="Születési idő">
+                        <Template Context="myContext">
+                                    @((myContext as User)?.BirthDate.ToString("yyyy.MM.dd") ?? "")
+                        </Template>
+                    </GridColumn>
+                    <GridColumn Field="@nameof(User.BirthPlace)" Width="120px" Title="Születési hely" TextAlign="@ColumnTextAlign.Center" />
+                    <GridColumn Field="@nameof(User.Id)" Title="Id" />
+        @*             <GridCommandColumn Context="myContext2" Width="50px">
+                                <GridCommandButton Icon="@SvgIcon.Pencil" ThemeColor="@ThemeConstants.Button.ThemeColor.Primary"
+                            OnClick="@EditInlineUserCommand" />
+                    </GridCommandColumn> *@
+                </GridColumns>
+            </TelerikGrid>
+            <div class="margin-top-10">
+                        <TelerikButton OnClick="@EditUserCommand">Szerkesztés</TelerikButton>
+                        <TelerikButton OnClick="@DownloadXmlCommand">Letöltés XML-ben</TelerikButton>
+            </div>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <h1>Bejelentkezés szükséges!</h1>
+    </NotAuthorized>
+</AuthorizeView>

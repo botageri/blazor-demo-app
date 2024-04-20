@@ -1,0 +1,107 @@
+﻿@page "/"
+@using BlazorDemo.Application.Users.SignIn
+@using BlazorDemoUI.Authentication
+@using MediatR;
+@using BlazorDemoUI.Data.SignIn
+@using Microsoft.AspNetCore.Identity
+@inject IJSRuntime JsRuntime
+@inject IMediator Mediator
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+
+@code {
+    #region Props
+
+    SignInUser User = new SignInUser();
+
+    bool SignInIsRunning = false;
+
+    #endregion
+
+    #region Commands
+
+    async void HandleValidSubmitCommand()
+    {
+        try
+        {
+            SignInIsRunning = true;
+            var email = User.Email;
+            var password = User.Password;
+
+            var userSignInSucceeded = await Mediator.Send(new SignInUserCommand(email, password));
+
+            if (userSignInSucceeded)
+            {
+                var customAuthStateProvider = (CustomAuthenticationStateProvider)AuthenticationStateProvider;
+                await customAuthStateProvider.UpdateAuthenticationState(new UserSession()
+                {
+                        UserName = email,
+                        Role = "admin"
+                });
+                NavigationManager.NavigateTo("/users");
+            }
+            else
+            {
+                SignInIsRunning = false;
+                await JsRuntime.InvokeVoidAsync("alert", "Felhasználó és jelszó nem található az adatbázisban!");
+            }
+        }
+        catch (Exception ex)
+        {
+            SignInIsRunning = false;
+            await JsRuntime.InvokeVoidAsync("alert", ex.Message);
+        }
+        finally
+        {
+            SignInIsRunning = false;
+        }
+    }
+
+    async void HandleInvalidSubmitCommand()
+    {
+        //await JsRuntime.InvokeVoidAsync("alert", "Felhasználó és jelszó nem található az adatbázisban!");
+    }
+
+    #endregion
+}
+
+<div class="container">
+    @if (SignInIsRunning)
+    {
+        <h1>Bejelentkezés...</h1>
+    }
+    else 
+    {
+    <h1>Belépés e-mail címmel és jelszóval</h1>
+    <TelerikForm Model="@User"
+                 OnValidSubmit="@HandleValidSubmitCommand"
+                 OnInvalidSubmit="@HandleInvalidSubmitCommand">
+        <FormValidation>
+            <DataAnnotationsValidator></DataAnnotationsValidator>
+        </FormValidation>
+        <FormItems>
+            <FormItem Field="@nameof(SignInUser.Email)">
+                <Template>
+                    <label for="mail" class="k-label k-form-label">Email*:</label>
+                    <TelerikTextBox Id="mail" @bind-Value="@User.Email" InputMode="email" Placeholder="example@domain.com"></TelerikTextBox>
+                    <TelerikValidationMessage For="@(() => User.Email)"></TelerikValidationMessage>
+                </Template>
+            </FormItem>
+            <FormItem Field="@nameof(SignInUser.Password)">
+                <Template>
+                    <label for="pass" class="k-label k-form-label">Password*:</label>
+                    <TelerikTextBox Id="pass" @bind-Value="@User.Password" Password="true"></TelerikTextBox>
+                    <TelerikValidationMessage For="@(() => User.Password)"></TelerikValidationMessage>
+                </Template>
+            </FormItem>
+        </FormItems>
+
+        <FormButtons>
+                <TelerikButton Class="form-button" ButtonType="@ButtonType.Submit" ThemeColor="primary">Bejelentkezés</TelerikButton>
+        </FormButtons>
+
+    </TelerikForm>
+    }
+</div>
+
+<PageTitle>SingIn</PageTitle>
