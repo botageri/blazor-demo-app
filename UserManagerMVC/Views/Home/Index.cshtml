@@ -1,0 +1,58 @@
+﻿@using UserManagerMVC.Models.SignIn;
+@model SignInUser;
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container mt-5">
+    <h1>Belépés e-mail címmel és jelszóval</h1>
+
+    <kendo-form name="form" 
+                form-data="@Model" 
+                method="POST" 
+                asp-action="Login"
+                buttons-template-id="myTemplate">
+        <validatable validate-on-blur="true" validation-summary="true" />
+        <form-items>
+            <form-item field="@nameof(SignInUser.Email)" />
+            <form-item field="@nameof(SignInUser.Password)" />
+        </form-items>     
+    </kendo-form>
+    <script type="text/x-kendo-template" id="myTemplate">
+        <button name="submitButton" class="form-button k-button k-button-md k-rounded-md k-button-solid k-button-solid-primary k-form-submit" type="submit">
+            <span class="k-button-text">Bejelentkezés</span>
+        </button>
+    </script>
+
+
+</div>
+
+@* <div class="row">
+    <div class="col-12">
+        @(Html.Kendo().Grid <UserManagerMVC.Models.OrderViewModel>()
+                            .Name("grid")
+                            .Columns(columns =>
+                            {
+                                columns.Bound(p => p.OrderID).Filterable(false);
+                                columns.Bound(p => p.Freight);
+                                columns.Bound(p => p.OrderDate).Format("{0:MM/dd/yyyy}");
+                                columns.Bound(p => p.ShipName);
+                                columns.Bound(p => p.ShipCity);
+                            })
+                            .Pageable()
+                            .Sortable()
+                            .Scrollable()
+                            .Groupable()
+                            .Filterable()
+                            .HtmlAttributes(new { style = "height:550px;" })
+                            .DataSource(dataSource => dataSource
+                                .Ajax()
+                                .PageSize(20)
+                                .Read(read => read.Action("Orders_Read", "Grid"))
+                             )
+        )
+    </div>
+</div> *@
+
+

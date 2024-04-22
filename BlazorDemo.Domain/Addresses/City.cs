@@ -13,6 +13,7 @@ public record City
     }
 
     [Required]
+    [DataType(DataType.PostalCode)]
     public string PostCode { get; set; } = string.Empty;
 
     [Required]

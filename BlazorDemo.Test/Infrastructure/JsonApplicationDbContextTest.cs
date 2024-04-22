@@ -18,7 +18,8 @@ public class JsonApplicationDbContextTest : DbTest
             Email = "teszt@elek.com",
             Password = "teszt",
             BirthDate = new DateTime(2000, 1, 2),
-            BirthPlace = "Budapest"
+            BirthPlace = "Budapest",
+            PhoneNumber = "1234567890"
         };
 
         _dbContext.Users.Add(user);

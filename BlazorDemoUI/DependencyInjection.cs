@@ -13,7 +13,6 @@ public static class DependencyInjection
         services.AddAuthenticationCore();
         services.AddScoped<ProtectedSessionStorage>();
         services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
-        services.AddScoped<SignInUserService>();
 
         return services;
     }

@@ -1,0 +1,84 @@
+﻿@using UserManagerMVC.Models.Users
+@using BlazorDemo.Domain.Addresses;
+@model EditUserViewModel;
+
+@{
+    ViewData["Title"] = "EditUser";
+}
+
+<div class="container mt-5">
+    <h1>Felhasználó szerkesztése</h1>
+
+    @(
+        Html.Kendo().Form<EditUserViewModel>()
+                                        .Name("formExample")
+                                        .HtmlAttributes(new { action = "Save", method = "POST" })
+                                        .ButtonsTemplateId("myTemplate")
+                                        .Validatable(v =>
+                                        {
+                                            v.ValidateOnBlur(true);
+                                            v.ValidationSummary(vs => vs.Enable(true));
+                                        }).Items(items =>
+                            {
+                                foreach (var property in ViewData.ModelMetadata.Properties)
+                                {
+                                    var editorTemplateHandler = property.PropertyName == "PhoneNumber" ? "customMaskedInputEditor" : "customEditor";
+
+                                    if (property.PropertyName == nameof(Model.PhoneNumber))
+                                    {
+                                        items.Add()
+                                        .Field(f => f.PhoneNumber)
+                                        .Label(l => l.Text("Telefonszám:*"))
+                                        .EditorTemplateHandler("customMaskedInputEditor");
+                                    }
+                                    else if (property.PropertyName == nameof(Model.PostCode))
+                                    {
+                                        items.Add()
+                                        .Field(f => f.PostCode)
+                                        .Editor(e =>
+                                        {
+                                            e.DropDownList()
+                                            .DataTextField("Name")
+                                            .DataValueField("PostCode")
+                                            .DataSource(source =>
+                                            {
+                                                source.Read(read =>
+                                        {
+                                            read.Action("Cities", "Users");
+                                        });
+                                });
+                                        });
+                                    }
+                                    else { items.Add().Field(property.Name); }
+
+                                }
+                            })
+    )
+    <script type="text/x-kendo-template" id="myTemplate">
+        <button name="submitButton" class="form-button k-button k-button-md k-rounded-md k-button-solid k-button-solid-primary k-form-submit" type="button" onclick="window.history.back()">
+            <span class="k-button-text">Vissza</span>
+        </button>
+        <button name="submitButton" class="form-button k-button k-button-md k-rounded-md k-button-solid k-button-solid-primary k-form-submit" type="submit">
+            <span class="k-button-text">Mentés</span>
+        </button>
+    </script>
+    <script type="text/x-kendo-template" id="postCodeDropDownListTemplate">
+        @(Html.Kendo().DropDownListFor(m => m.PostCode)
+                .DataTextField("Name")
+                .DataValueField("PostCode")
+                .DataSource(source => source.Read(read => read.Action("Cities", "Users")))
+                .HtmlAttributes(new { @class = "form-control" })
+            )
+    </script>
+    <script>
+        function customMaskedInputEditor(container, options) {
+            $('<input class="k-textbox" name="' + options.field + '"/>')
+                .appendTo(container)
+                .kendoMaskedTextBox({
+                    mask: "(+99) 000-0000",
+                    clearPromptChar: true
+                });
+        }
+    </script>
+</div>
+

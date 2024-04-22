@@ -1,4 +1,5 @@
 ﻿using BlazorDemo.Application.Data;
+using BlazorDemo.Domain.Primitives;
 using BlazorDemo.Domain.Users;
 using MediatR;
 
@@ -18,7 +19,7 @@ internal sealed class SaveUserCommandHandler : IRequestHandler<SaveUserCommand>
     public async Task Handle(SaveUserCommand request, CancellationToken cancellationToken)
     {
         if (_userRepository.AnySameAuthentication(request.User.Id, request.User.Email, request.User.Password))
-            throw new Exception("Emailcím és jelszó páros már használatban van!");
+            throw new DomainException("Emailcím és jelszó páros már használatban van!");
 
         request.User.Validate();
 

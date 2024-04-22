@@ -14,4 +14,10 @@
     <ProjectReference Include="..\BlazorDemo.Infrastructure\BlazorDemo.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="userDb.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

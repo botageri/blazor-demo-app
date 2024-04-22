@@ -1,0 +1,40 @@
+{
+  "Users": [
+    {
+      "FirstName": "Elek",
+      "LastName": "Test",
+      "City": { "PostCode": "5000", "Name": "Szolnok" },
+      "Address": "Szigligeti út 5",
+      "Email": "teszt@elek.com",
+      "Password": "1234",
+      "BirthDate": "2000-01-14T00:00:00",
+      "BirthPlace": "Budapest",
+      "PhoneNumber": "01234567899",
+      "Id": 1
+    },
+    {
+      "FirstName": "Gipsz",
+      "LastName": "Jakab",
+      "City": { "PostCode": "1000", "Name": "Budapest" },
+      "Address": "Szigligeti út 6",
+      "Email": "gipsz@jakab.com",
+      "Password": "1234",
+      "BirthDate": "2000-01-02T00:00:00",
+      "BirthPlace": "Budapest",
+      "PhoneNumber": "01234567899",
+      "Id": 2
+    },
+    {
+      "FirstName": "Admin",
+      "LastName": "admin",
+      "City": { "PostCode": "5000", "Name": "Szolnok" },
+      "Address": "Szigligeti út 7",
+      "Email": "admin@admin.com",
+      "Password": "admin",
+      "BirthDate": "2000-01-02T00:00:00",
+      "BirthPlace": "Budapest",
+      "PhoneNumber": "01234567899",
+      "Id": 3
+    }
+  ]
+}

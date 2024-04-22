@@ -13,6 +13,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorDemo.Infrastructure",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorDemo.Test", "BlazorDemo.Test\BlazorDemo.Test.csproj", "{4724524E-2FBB-4CF2-93D3-14654BBA8EBE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserManagerMVC", "UserManagerMVC\UserManagerMVC.csproj", "{484F2B10-439A-4C2D-AA71-0560FF33CBFE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JwtForDotNetCore6", "..\..\WebApi\JwtForDotNetCore6\JwtForDotNetCore6.csproj", "{26A5F99E-5C91-4796-A700-13CD32EDCE4A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{4724524E-2FBB-4CF2-93D3-14654BBA8EBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4724524E-2FBB-4CF2-93D3-14654BBA8EBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4724524E-2FBB-4CF2-93D3-14654BBA8EBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{484F2B10-439A-4C2D-AA71-0560FF33CBFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{484F2B10-439A-4C2D-AA71-0560FF33CBFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{484F2B10-439A-4C2D-AA71-0560FF33CBFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{484F2B10-439A-4C2D-AA71-0560FF33CBFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26A5F99E-5C91-4796-A700-13CD32EDCE4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26A5F99E-5C91-4796-A700-13CD32EDCE4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26A5F99E-5C91-4796-A700-13CD32EDCE4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26A5F99E-5C91-4796-A700-13CD32EDCE4A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

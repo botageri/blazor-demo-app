@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace BlazorDemoUI.Data.SignIn;
+namespace UserManagerMVC.Models.SignIn;
 
 public class SignInUser
 {
