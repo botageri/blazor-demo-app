@@ -1,4 +1,4 @@
-Aki elindítja annak ki fog másolni egy alap userDb-t, amiben vannak felhasználók.
+Aki elindítja annak ki fog másolni egy alap userDb(.json)-t, amiben vannak felhasználók.
 
 1. ASP.NET MVC felhasználó menedzsment alkalmazás létrehozása (C#, .Net Core 6+)
 2. Fájl alapú ‘adatbázis’, amelyben felhasználó adatok vannak tárolva (pl. pontosvesszővel tagoltan): Azonosító, Felh.név, Jelszó, Vezetéknév, Keresztnév, Szül. idő, Szül. hely, Lakhely (város)
